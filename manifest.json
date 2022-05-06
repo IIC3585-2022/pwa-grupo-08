@@ -1,0 +1,28 @@
+{
+    "name": "PWA",
+    "start_url": "/",
+    "display": "standalone",
+    "id": "grupo-8-pwa",
+    "background_color": "#FFFFFF",
+    "theme_color": "#2AABEE",
+    "icons": [
+        {
+            "src": "/icon.svg",
+            "type": "image/svg",
+            "purpose": "maskable any",
+            "sizes": "any"
+        },
+        {
+            "src": "/apple-touch-icon-180x180.png",
+            "type": "image/png",
+            "purpose": "maskable any",
+            "sizes": "180x180"
+        },
+        {
+            "src": "/icon.png",
+            "type": "image/png",
+            "purpose": "maskable any",
+            "sizes": "512x512"
+        }
+    ]
+}

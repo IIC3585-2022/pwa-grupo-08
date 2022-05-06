@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset='utf-8'>
+    <meta name='viewport' content='width=device-width,initial-scale=1'>
+
+    <title>PWA</title>
+
+    <link rel='stylesheet' href='/global.css'>
+    <link rel="manifest" href="/manifest.json">
+    <meta name="theme-color" content="#2AABEE"/>
+    <link rel="apple-touch-icon" href="/apple-touch-icon-180x180.png">
+    <link rel="icon" href="/icon.svg" type="image/svg" />
+</head>
+
+<body>
+<h1> Hello </h1>
+
+<script type="module">
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('/service-worker.js')
+  .then(function(registration) {
+    console.log('Registration successful, scope is:', registration.scope);
+  })
+  .catch(function(error) {
+    console.log('Service worker registration failed, error:', error);
+  });
+}
+
+// Import the functions you need from the SDKs you need
+import { initializeApp } from "https://www.gstatic.com/firebasejs/9.7.0/firebase-app.js";
+import { getMessaging, getToken } from "https://www.gstatic.com/firebasejs/9.7.0/firebase-messaging.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyCEi8Sli7LzDwvZN2-GDataElZyDDvvAg4",
+  authDomain: "pwa-grupo-8.firebaseapp.com",
+  projectId: "pwa-grupo-8",
+  storageBucket: "pwa-grupo-8.appspot.com",
+  messagingSenderId: "179603256271",
+  appId: "1:179603256271:web:eee9a5570fa24c36e8d8ba"
+};
+
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
+const messaging = getMessaging(app);
+
+
+// Get registration token. Initially this makes a network call, once retrieved
+// subsequent calls to getToken will return from cache.
+getToken(messaging, { vapidKey: 'BOHTJkUjCPr4CFTylJ1WQr1GY9KHJ-XS3yt4YKVWskVkkwkTRnQZZNZNP-G33KbbtVBTIJvCrBHhioHZ4x_HUjg' }).then((currentToken) => {
+  if (currentToken) {
+    console.log(currentToken)
+    // Send the token to your server and update the UI if necessary
+  } else {
+    // Show permission request UI
+    console.log('No registration token available. Request permission to generate one.');
+  }
+}).catch((err) => {
+  console.log('An error occurred while retrieving token. ', err);
+});
+
+navigator.serviceWorker.addEventListener('message', event => {
+  console.log("Message event: ", event.data.data);
+  handleNewMessage(event.data.data);
+});
+
+function handleNewMessage(msg) {
+  console.log("Handle: ", msg)
+}
+</script>
+
+<div class="messages"></div>
+<input type="text" placeholder="Mensaje">
+<button>Send</button>
+
+</body>
+</html>
