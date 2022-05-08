@@ -4,7 +4,7 @@
     <meta charset='utf-8'>
     <meta name='viewport' content='width=device-width,initial-scale=1'>
 
-    <title>PWA</title>
+    <title>PWA Grupo 8</title>
 
     <link rel='stylesheet' href='/global.css'>
     <link rel="manifest" href="/manifest.json">
@@ -15,6 +15,11 @@
 
 <body>
 <h1> Hello </h1>
+<div id="msg-list" class="messages"></div>
+<input id="password" type="text" placeholder="Password">
+<input id="username" type="text" placeholder="Username">
+<input id="message" type="text" placeholder="Mensaje">
+<button id="send">Send</button>
 
 <script type="module">
 if ('serviceWorker' in navigator) {
@@ -65,13 +70,82 @@ navigator.serviceWorker.addEventListener('message', event => {
 });
 
 function handleNewMessage(msg) {
-  console.log("Handle: ", msg)
+  console.log("Handle: ", msg);
+  appendMessage(msg);
 }
+
+
+function appendMessage(msg) {
+  const msgList = document.getElementById('msg-list');
+  const msgElement = document.createElement('p');
+  msgElement.textContent = `${msg.user}: ${msg.content}`;
+  msgList.appendChild(msgElement);
+}
+
+const sendButton = document.getElementById('send');
+sendButton.addEventListener("click", sendMessage);
+
+
+async function sendMessage(event) {
+  console.log(event);
+  const password = document.getElementById('password').value;
+  const username = document.getElementById('username').value;
+  const message = document.getElementById('message').value;
+
+  // const response = await sendRequest("/messages", "GET");
+  const response = await sendRequest("/messages", "POST", {
+    "password": password,
+    "user": username,
+    "content": message
+  });
+  console.log(response);
+  console.log({password, username, message});
+}
+
+
+async function getMessages() {
+  const response = await sendRequest("/messages", "GET");
+  return response.messages;
+}
+
+
+function sendRequest(path, method, body) {
+  let req = {
+    method: method, // *GET, POST, PUT, DELETE, etc.
+    mode: 'cors', // no-cors, *cors, same-origin
+    cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
+    credentials: 'include', // include, *same-origin, omit
+    headers: {
+      'Content-Type': 'application/json'
+      // 'Content-Type': 'application/x-www-form-urlencoded',
+    },
+    redirect: 'follow', // manual, *follow, error
+    referrerPolicy: 'no-referrer-when-downgrade' // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
+  };
+  if (body) {
+    req.body = JSON.stringify(body); // body data type must match "Content-Type" header
+  }
+  return fetch("https://pwa-backend-g-8.herokuapp.com/api/v1" + path, req)
+    .then((response) => response.json())
+    .then((json) => {
+      if (json.error) {
+        console.log(json);
+      }
+
+      return json;
+    })
+    .catch((error) => {
+      console.log(error);
+      throw error;
+    });
+}
+
+  const messages = await getMessages();
+  for (const msg of messages) {
+    appendMessage(msg);
+    console.log(msg);
+  }
+
 </script>
-
-<div class="messages"></div>
-<input type="text" placeholder="Mensaje">
-<button>Send</button>
-
 </body>
 </html>
