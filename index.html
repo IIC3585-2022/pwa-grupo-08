@@ -4,22 +4,22 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width,initial-scale=1" />
 
-    <title>PWA Grupo 8</title>
+    <title>Chat de Terra</title>
 
     <link rel="stylesheet" href="/global.css" />
     <link rel="manifest" href="/manifest.json" />
     <meta name="theme-color" content="#2AABEE" />
-    <link rel="apple-touch-icon" href="/apple-touch-icon-180x180.png" />
-    <link rel="icon" href="/icon.svg" type="image/svg" />
+    <link rel="apple-touch-icon" href="/favicon.png" />
+    <link rel="icon" href="/favicon.png" type="image/png" />
   </head>
 
   <body>
     <img id="main-logo" src="main-logo.png" />
     <div id="msg-list" class="messages"></div>
     <div class="inputs">
-      <input id="user" type="text" placeholder="User" />
-      <input id="message" type="text" placeholder="Message" />
-      <button id="send">Send</button>
+      <input id="user" type="text" placeholder="Usuario" />
+      <input id="message" type="text" placeholder="Mensaje" />
+      <button id="send">Enviar</button>
     </div>
 
     <script type="module">
@@ -94,6 +94,7 @@
         const msgElement = document.createElement('p');
         msgElement.textContent = `${msg.user}: ${msg.content}`;
         msgList.appendChild(msgElement);
+        msgList.scrollTo(0, msgList.scrollHeight);
       }
 
       const sendButton = document.getElementById('send');
@@ -111,6 +112,7 @@
         });
         console.log(response);
         console.log({ user, message });
+        document.getElementById('message').value = '';
       }
 
       async function getMessages() {

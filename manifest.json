@@ -4,22 +4,22 @@
     "display": "standalone",
     "id": "grupo-8-pwa",
     "background_color": "#FFFFFF",
-    "theme_color": "#2AABEE",
+    "theme_color": "#ffa200",
     "icons": [
         {
-            "src": "/icon.svg",
-            "type": "image/svg",
+            "src": "/favicon.png",
+            "type": "image/png",
             "purpose": "maskable any",
             "sizes": "any"
         },
         {
-            "src": "/apple-touch-icon-180x180.png",
+            "src": "/favicon.png",
             "type": "image/png",
             "purpose": "maskable any",
             "sizes": "180x180"
         },
         {
-            "src": "/icon.png",
+            "src": "/favicon.png",
             "type": "image/png",
             "purpose": "maskable any",
             "sizes": "512x512"
