@@ -1,151 +1,159 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset='utf-8'>
-    <meta name='viewport' content='width=device-width,initial-scale=1'>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
 
     <title>PWA Grupo 8</title>
 
-    <link rel='stylesheet' href='/global.css'>
-    <link rel="manifest" href="/manifest.json">
-    <meta name="theme-color" content="#2AABEE"/>
-    <link rel="apple-touch-icon" href="/apple-touch-icon-180x180.png">
+    <link rel="stylesheet" href="/global.css" />
+    <link rel="manifest" href="/manifest.json" />
+    <meta name="theme-color" content="#2AABEE" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon-180x180.png" />
     <link rel="icon" href="/icon.svg" type="image/svg" />
-</head>
+  </head>
 
-<body>
-<h1> Hello </h1>
-<div id="msg-list" class="messages"></div>
-<input id="password" type="text" placeholder="Password">
-<input id="username" type="text" placeholder="Username">
-<input id="message" type="text" placeholder="Mensaje">
-<button id="send">Send</button>
+  <body>
+    <img id="main-logo" src="main-logo.png" />
+    <div id="msg-list" class="messages"></div>
+    <div class="inputs">
+      <input id="user" type="text" placeholder="User" />
+      <input id="message" type="text" placeholder="Message" />
+      <button id="send">Send</button>
+    </div>
 
-<script type="module">
-if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('/service-worker.js')
-  .then(function(registration) {
-    console.log('Registration successful, scope is:', registration.scope);
-  })
-  .catch(function(error) {
-    console.log('Service worker registration failed, error:', error);
-  });
-}
-
-// Import the functions you need from the SDKs you need
-import { initializeApp } from "https://www.gstatic.com/firebasejs/9.7.0/firebase-app.js";
-import { getMessaging, getToken } from "https://www.gstatic.com/firebasejs/9.7.0/firebase-messaging.js";
-
-const firebaseConfig = {
-  apiKey: "AIzaSyCEi8Sli7LzDwvZN2-GDataElZyDDvvAg4",
-  authDomain: "pwa-grupo-8.firebaseapp.com",
-  projectId: "pwa-grupo-8",
-  storageBucket: "pwa-grupo-8.appspot.com",
-  messagingSenderId: "179603256271",
-  appId: "1:179603256271:web:eee9a5570fa24c36e8d8ba"
-};
-
-// Initialize Firebase
-const app = initializeApp(firebaseConfig);
-const messaging = getMessaging(app);
-
-
-// Get registration token. Initially this makes a network call, once retrieved
-// subsequent calls to getToken will return from cache.
-getToken(messaging, { vapidKey: 'BOHTJkUjCPr4CFTylJ1WQr1GY9KHJ-XS3yt4YKVWskVkkwkTRnQZZNZNP-G33KbbtVBTIJvCrBHhioHZ4x_HUjg' }).then((currentToken) => {
-  if (currentToken) {
-    console.log(currentToken)
-    // Send the token to your server and update the UI if necessary
-  } else {
-    // Show permission request UI
-    console.log('No registration token available. Request permission to generate one.');
-  }
-}).catch((err) => {
-  console.log('An error occurred while retrieving token. ', err);
-});
-
-navigator.serviceWorker.addEventListener('message', event => {
-  console.log("Message event: ", event.data.data);
-  handleNewMessage(event.data.data);
-});
-
-function handleNewMessage(msg) {
-  console.log("Handle: ", msg);
-  appendMessage(msg);
-}
-
-
-function appendMessage(msg) {
-  const msgList = document.getElementById('msg-list');
-  const msgElement = document.createElement('p');
-  msgElement.textContent = `${msg.user}: ${msg.content}`;
-  msgList.appendChild(msgElement);
-}
-
-const sendButton = document.getElementById('send');
-sendButton.addEventListener("click", sendMessage);
-
-
-async function sendMessage(event) {
-  console.log(event);
-  const password = document.getElementById('password').value;
-  const username = document.getElementById('username').value;
-  const message = document.getElementById('message').value;
-
-  // const response = await sendRequest("/messages", "GET");
-  const response = await sendRequest("/messages", "POST", {
-    "password": password,
-    "user": username,
-    "content": message
-  });
-  console.log(response);
-  console.log({password, username, message});
-}
-
-
-async function getMessages() {
-  const response = await sendRequest("/messages", "GET");
-  return response.messages;
-}
-
-
-function sendRequest(path, method, body) {
-  let req = {
-    method: method, // *GET, POST, PUT, DELETE, etc.
-    mode: 'cors', // no-cors, *cors, same-origin
-    cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
-    credentials: 'include', // include, *same-origin, omit
-    headers: {
-      'Content-Type': 'application/json'
-      // 'Content-Type': 'application/x-www-form-urlencoded',
-    },
-    redirect: 'follow', // manual, *follow, error
-    referrerPolicy: 'no-referrer-when-downgrade' // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
-  };
-  if (body) {
-    req.body = JSON.stringify(body); // body data type must match "Content-Type" header
-  }
-  return fetch("https://pwa-backend-g-8.herokuapp.com/api/v1" + path, req)
-    .then((response) => response.json())
-    .then((json) => {
-      if (json.error) {
-        console.log(json);
+    <script type="module">
+      if ('serviceWorker' in navigator) {
+        navigator.serviceWorker
+          .register('/service-worker.js')
+          .then(function (registration) {
+            console.log(
+              'Registration successful, scope is:',
+              registration.scope
+            );
+          })
+          .catch(function (error) {
+            console.log('Service worker registration failed, error:', error);
+          });
       }
 
-      return json;
-    })
-    .catch((error) => {
-      console.log(error);
-      throw error;
-    });
-}
+      // Import the functions you need from the SDKs you need
+      import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.7.0/firebase-app.js';
+      import {
+        getMessaging,
+        getToken,
+      } from 'https://www.gstatic.com/firebasejs/9.7.0/firebase-messaging.js';
 
-  const messages = await getMessages();
-  for (const msg of messages) {
-    appendMessage(msg);
-    console.log(msg);
-  }
+      const firebaseConfig = {
+        apiKey: 'AIzaSyCEi8Sli7LzDwvZN2-GDataElZyDDvvAg4',
+        authDomain: 'pwa-grupo-8.firebaseapp.com',
+        projectId: 'pwa-grupo-8',
+        storageBucket: 'pwa-grupo-8.appspot.com',
+        messagingSenderId: '179603256271',
+        appId: '1:179603256271:web:eee9a5570fa24c36e8d8ba',
+      };
 
-</script>
-</body>
+      // Initialize Firebase
+      const app = initializeApp(firebaseConfig);
+      const messaging = getMessaging(app);
+
+      const vapidKey =
+        'BOHTJkUjCPr4CFTylJ1WQr1GY9KHJ-XS3yt4YKVWskVkkwkTRnQZZNZNP-G33KbbtVBTIJvCrBHhioHZ4x_HUjg';
+      // Get registration token. Initially this makes a network call, once retrieved
+      // subsequent calls to getToken will return from cache.
+      getToken(messaging, { vapidKey })
+        .then((currentToken) => {
+          if (currentToken) {
+            console.log(currentToken);
+            sendRequest('/token', 'POST', { token: currentToken }).then(
+              (response) => console.log('Send token response:', response)
+            );
+          } else {
+            // Show permission request UI
+            console.log(
+              'No registration token available. Request permission to generate one.'
+            );
+          }
+        })
+        .catch((err) => {
+          console.log('An error occurred while retrieving token. ', err);
+        });
+
+      navigator.serviceWorker.addEventListener('message', (event) => {
+        console.log('Message event: ', event.data.data);
+        handleNewMessage(event.data.data);
+      });
+
+      function handleNewMessage(msg) {
+        console.log('Handle: ', msg);
+        appendMessage(msg);
+      }
+
+      function appendMessage(msg) {
+        const msgList = document.getElementById('msg-list');
+        const msgElement = document.createElement('p');
+        msgElement.textContent = `${msg.user}: ${msg.content}`;
+        msgList.appendChild(msgElement);
+      }
+
+      const sendButton = document.getElementById('send');
+      sendButton.addEventListener('click', sendMessage);
+
+      async function sendMessage(event) {
+        console.log(event);
+        const user = document.getElementById('user').value;
+        const message = document.getElementById('message').value;
+
+        // const response = await sendRequest("/messages", "GET");
+        const response = await sendRequest('/messages', 'POST', {
+          user: user,
+          content: message,
+        });
+        console.log(response);
+        console.log({ user, message });
+      }
+
+      async function getMessages() {
+        const response = await sendRequest('/messages', 'GET');
+        return response.messages;
+      }
+
+      function sendRequest(path, method, body) {
+        let req = {
+          method: method, // *GET, POST, PUT, DELETE, etc.
+          mode: 'cors', // no-cors, *cors, same-origin
+          cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
+          credentials: 'include', // include, *same-origin, omit
+          headers: {
+            'Content-Type': 'application/json',
+            // 'Content-Type': 'application/x-www-form-urlencoded',
+          },
+          redirect: 'follow', // manual, *follow, error
+          referrerPolicy: 'no-referrer-when-downgrade', // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
+        };
+        if (body) {
+          req.body = JSON.stringify(body); // body data type must match "Content-Type" header
+        }
+        return fetch('https://pwa-backend-g-8.herokuapp.com/api/v1' + path, req)
+          .then((response) => response.json())
+          .then((json) => {
+            if (json.error) {
+              console.log(json);
+            }
+
+            return json;
+          })
+          .catch((error) => {
+            console.log(error);
+            throw error;
+          });
+      }
+
+      const messages = await getMessages();
+      for (const msg of messages) {
+        appendMessage(msg);
+        console.log(msg);
+      }
+    </script>
+  </body>
 </html>

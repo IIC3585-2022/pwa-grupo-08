@@ -1,1 +1,56 @@
+body {
+  background-color: #ffa200;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  width: 100vw;
+  margin: 0;
+  padding: 0;
+}
 
+#main-logo {
+  height: 60px;
+}
+
+.messages {
+  width: 90%;
+  background-color: white;
+  overflow-y: scroll;
+  margin-bottom: 1rem;
+}
+
+.messages p {
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+  padding: 4px;
+  margin: 0;
+}
+.messages p:nth-child(odd) {
+  background-color: #DEDEDE;
+}
+
+.inputs {
+  display: flex;
+  width: 90%;
+  justify-content: center;
+  align-items: center;
+}
+
+#user {
+  flex: 1;
+}
+#message {
+  flex: 3;
+}
+#send {
+  flex: 1;
+}
+
+/* <img id="main-logo" src="main-logo.png" />
+    <div id="msg-list" class="messages"></div>
+    <div class="inputs">
+      <input id="user" type="text" placeholder="User" />
+      <input id="message" type="text" placeholder="Message" />
+      <button id="send">Send</button>
+    </div> */
