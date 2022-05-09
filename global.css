@@ -35,13 +35,14 @@ body {
   justify-content: center;
   align-items: center;
   margin: 16px 0;
+  flex-wrap: wrap;
 }
 
 #user {
   flex: 1;
 }
 #message {
-  flex: 4;
+  flex: 1;
 }
 #send {
   flex: 1;
