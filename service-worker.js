@@ -33,7 +33,7 @@ self.addEventListener('activate', async (event) => {
     .map((key) => event.waitUntil(caches.delete(key)));
 });
 
-async function cacheFirst(request) {
+async function networkFirst(request) {
   const cache = await self.caches.open(CACHE_NAME);
   try {
     const response = await fetch(request);
@@ -48,5 +48,5 @@ async function cacheFirst(request) {
 
 self.addEventListener('fetch', (event) => {
   if (event.request.method != 'GET') return;
-  event.respondWith(cacheFirst(event.request));
+  event.respondWith(networkFirst(event.request));
 });
