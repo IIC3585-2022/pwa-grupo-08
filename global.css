@@ -15,7 +15,7 @@ body {
 }
 
 .messages {
-  width: 90%;
+  width: 80%;
   background-color: white;
   overflow-y: scroll;
 }
@@ -31,7 +31,7 @@ body {
 
 .inputs {
   display: flex;
-  width: 90%;
+  width: 80%;
   justify-content: center;
   align-items: center;
   margin: 16px 0;
